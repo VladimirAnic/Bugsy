@@ -5,7 +5,12 @@ package com.example.vladimir.bugsy;
  */
 
 public class Reader {
-    String title, link, category, description, image, pubDate;
+    public static String title;
+    public String link;
+    public static String category;
+    public static String description;
+    public String image;
+    public static String pubDate;
 
     public Reader(String title, String link, String category, String description, String image, String pubDate) {
         this.title = title;
