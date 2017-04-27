@@ -23,12 +23,18 @@ public class ReaderAdapter extends RecyclerView.Adapter<ReaderAdapter.ReaderHold
     private Context context;
     private List<Reader> mReader;
 
+    public ReaderAdapter(List<Reader> mFeedModelList, Context context) {
+        mReader = mFeedModelList;
+        this.context = context;
+    }
+
+
     public static class ReaderHolder extends RecyclerView.ViewHolder {
-        private View newsView;
+        private View raderView;
 
         public ReaderHolder(View v) {
             super(v);
-            newsView = v;
+            raderView = v;
         }
     }
 
@@ -43,22 +49,19 @@ public class ReaderAdapter extends RecyclerView.Adapter<ReaderAdapter.ReaderHold
     @Override
     public void onBindViewHolder(final ReaderHolder holder, int position) {
         final Reader reader = mReader.get(position);
-        ((TextView) holder.newsView.findViewById(R.id.tvTitle)).setText(Reader.title);
-        ((TextView) holder.newsView.findViewById(R.id.tvDescription)).setText(Reader.description);
-        ((TextView) holder.newsView.findViewById(R.id.tvCategory)).setText(Reader.category);
-        ((TextView) holder.newsView.findViewById(R.id.tvPubDate)).setText(Reader.pubDate);
-        ImageView ivImage = ((ImageView) holder.newsView.findViewById(R.id.ivImage));
-        holder.newsView.setOnClickListener(new MyOnClickListener(position));
+        ((TextView) holder.raderView.findViewById(R.id.tvTitle)).setText(Reader.title);
+        ((TextView) holder.raderView.findViewById(R.id.tvDescription)).setText(Reader.description);
+        ((TextView) holder.raderView.findViewById(R.id.tvCategory)).setText(Reader.category);
+        ((TextView) holder.raderView.findViewById(R.id.tvPubDate)).setText(Reader.pubDate);
+        ImageView ivImage = ((ImageView) holder.raderView.findViewById(R.id.ivImage));
+        holder.raderView.setOnClickListener(new MyOnClickListener(position));
         Picasso.with(context)
                 .load(reader.image)
                 .resize(300, 300)
                 .into(ivImage);
     }
 
-    @Override
-    public int getItemCount() {
-        return mReader.size();
-    }
+
 
     private class MyOnClickListener implements View.OnClickListener {
         int position;
@@ -78,5 +81,9 @@ public class ReaderAdapter extends RecyclerView.Adapter<ReaderAdapter.ReaderHold
             implicitIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(implicitIntent);
         }
+    }
+    @Override
+    public int getItemCount() {
+        return mReader.size();
     }
 }
