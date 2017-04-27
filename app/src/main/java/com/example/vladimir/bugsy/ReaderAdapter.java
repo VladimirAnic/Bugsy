@@ -23,8 +23,8 @@ public class ReaderAdapter extends RecyclerView.Adapter<ReaderAdapter.ReaderHold
     private Context context;
     private List<Reader> mReader;
 
-    public ReaderAdapter(List<Reader> mFeedModelList, Context context) {
-        mReader = mFeedModelList;
+    public ReaderAdapter(List<Reader> ModelList, Context context) {
+        mReader = ModelList;
         this.context = context;
     }
 
@@ -49,10 +49,14 @@ public class ReaderAdapter extends RecyclerView.Adapter<ReaderAdapter.ReaderHold
     @Override
     public void onBindViewHolder(final ReaderHolder holder, int position) {
         final Reader reader = mReader.get(position);
-        ((TextView) holder.raderView.findViewById(R.id.tvTitle)).setText(Reader.title);
-        ((TextView) holder.raderView.findViewById(R.id.tvDescription)).setText(Reader.description);
-        ((TextView) holder.raderView.findViewById(R.id.tvCategory)).setText(Reader.category);
-        ((TextView) holder.raderView.findViewById(R.id.tvPubDate)).setText(Reader.pubDate);
+        TextView title = (TextView) holder.raderView.findViewById(R.id.tvTitle);
+        title.setText(reader.title);
+        TextView description =  (TextView) holder.raderView.findViewById(R.id.tvDescription);
+        description.setText(reader.description);
+        TextView category = (TextView) holder.raderView.findViewById(R.id.tvCategory);
+        category.setText(reader.category);
+        TextView pubDate = (TextView) holder.raderView.findViewById(R.id.tvPubDate);
+        pubDate.setText(reader.pubDate);
         ImageView ivImage = ((ImageView) holder.raderView.findViewById(R.id.ivImage));
         holder.raderView.setOnClickListener(new MyOnClickListener(position));
         Picasso.with(context)

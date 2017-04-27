@@ -9,6 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -20,12 +23,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeLayout;
     private List<Reader> mFeedModelList;
+    private ImageButton ibSearch;
+    private EditText etSearch;
     private String searchCategory="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +43,18 @@ public class MainActivity extends Activity {
     private void setUpUI() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        ibSearch = (ImageButton) findViewById(R.id.ibSearch);
+        etSearch = (EditText) findViewById(R.id.etSearch);
+
+        ibSearch.setOnClickListener(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         new FetchFeedTask().execute((Void) null);
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-               // searchCategory="";
+                etSearch.setText("");
+                searchCategory="";
                 new FetchFeedTask().execute((Void) null);
             }
         });
@@ -97,7 +107,11 @@ public class MainActivity extends Activity {
                 } else if (name.equalsIgnoreCase("description")) {
                     description = result;
                 } else if (name.equalsIgnoreCase("category")) {
-                    category = result;
+                    if (searchCategory.equals("")) category = result;
+                    else {
+                        if (result.equals(searchCategory)) category = result;
+                        else category = null;
+                    }
                 } else if (name.equalsIgnoreCase("enclosure")) {
                     image = xmlPullParser.getAttributeValue(1);
                 } else if (name.equalsIgnoreCase("pubDate")) {
@@ -106,7 +120,7 @@ public class MainActivity extends Activity {
 
                 if (title != null && link != null && description != null && category != null && image != null && pubDate != null) {
                     if (isItem) {
-                        Reader item = new Reader(title, link, description, category, image, pubDate);
+                        Reader item = new Reader(title, link, category, description, image, pubDate);
                         items.add(item);
                     }
 
@@ -125,6 +139,13 @@ public class MainActivity extends Activity {
             inputStream.close();
         }
     }
+
+    @Override
+    public void onClick(View v) {
+        searchCategory = etSearch.getText().toString();
+        new FetchFeedTask().execute((Void) null);
+    }
+
     private class FetchFeedTask extends AsyncTask<Void, Void, Boolean> {
 
         private String urlLink;
