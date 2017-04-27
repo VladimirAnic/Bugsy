@@ -3,6 +3,7 @@ package com.example.vladimir.bugsy;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +64,15 @@ public class ReaderAdapter extends RecyclerView.Adapter<ReaderAdapter.ReaderHold
                 .load(reader.image)
                 .resize(300, 300)
                 .into(ivImage);
+
+        if(position%2==0){
+
+            holder.raderView.setBackgroundColor(ContextCompat.getColor(context,R.color.color1));
+
+        }else{
+            holder.raderView.setBackgroundColor(ContextCompat.getColor(context,R.color.color2));
+
+        }
     }
 
 
